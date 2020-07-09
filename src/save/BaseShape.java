@@ -20,6 +20,7 @@ public abstract class BaseShape{
 	public abstract List<Point2D> getPoints();
 	public abstract String getType();
 	public abstract void setCoordinates(List<Point2D> points);
+        public abstract BaseShape cloneShape();
 }
 
 

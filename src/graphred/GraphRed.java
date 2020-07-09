@@ -4,10 +4,7 @@ package graphred;
 
 import ColorsButton.ColorBaseButton;
 import save.*;
-import graphred.instruments.CircleButton;
-import graphred.instruments.LineButton;
-import graphred.instruments.PolygonButton;
-import graphred.instruments.RectangleButton;
+import graphred.instruments.ShapeButton;
 import graphred.shape.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -29,29 +26,28 @@ public class GraphRed extends javax.swing.JFrame{
     
 //    JLabel jl,l,l1,l2;
     JPanel p;
-    JFrame fr;
+    JFrame me = this;
     MyCanvas jp;
     Queue q= new Queue();
     
     public GraphRed(){
        super("Графический редактор");
         this.setSize(1920,1080);
-        fr= this;
         this.setVisible(true);
         this.setLayout(null);
-        jp = new MyCanvas(1450,700,q);
-        jp.setVisible(true);
-        jp.setBounds(30,90,1450,700);
         
-        p = new JPanel();
-        p.setVisible(true);
-        p.setBounds(1250, 10, 70, 70);
-       
-        int wc = 10;
-        int hc = 5;
-        for (int i = 1; i <= wc; i++){
-            for (int j = 1; j <= hc; j++){
-                int col = Color.HSBtoRGB(1f/wc * i , 1, 1f/hc * j);
+        initialize();
+        
+        this.repaint();
+        
+    }
+    
+    public void initColorSelector(int hueVar, int brVar){
+//        int wc = 10;
+//        int hc = 5;
+        for (int i = 1; i <= hueVar; i++){
+            for (int j = 1; j <= brVar; j++){
+                int col = Color.HSBtoRGB(1f/hueVar * i , 1, 1f/brVar * j);
                 ColorBaseButton btn = new ColorBaseButton(new Color(col));
                 btn.setBounds(i * 20, (j * 15) - 10, 20, 15);
                 
@@ -67,7 +63,32 @@ public class GraphRed extends javax.swing.JFrame{
                  
             }
         }
-        
+    }
+    
+    public void initInstruments(){
+        BaseShape[] bss = {new PolyLineShape(), new RectangleShape(), new CircleShape(), new PolygonShape()};
+        int i = 0;
+        for (BaseShape bs: bss){
+            JButton jb = new ShapeButton(bs);
+            jb.setVisible(true);
+            jb.setBounds(230+200*i, 30,200,20);
+            i++;
+            jb.addActionListener ( 
+            new ActionListener()
+                {
+                     @Override
+                     public void actionPerformed(ActionEvent e){
+                         if (jb instanceof ShapeButton) q.addShape(((ShapeButton)jb).getShape());
+        //                jl.setText("new Line"+q.getSize()+"generated");
+                         me.repaint();
+                     }
+                });
+            
+            this.add(jb);
+        }
+    }
+    
+    public void initLoadButton(){
         JButton ld = new JButton("Загрузить");
         ld.setBounds(1420, 30, 90, 25);
         ld.setVisible(true);
@@ -113,8 +134,10 @@ public class GraphRed extends javax.swing.JFrame{
                     }
                    
                 });
-        
-        
+        this.add(ld);
+    }
+    
+    public void initSaveButton(){
         JButton s = new JButton("Сохранить");
         s.setBounds(1330, 30, 90, 25);
         s.setVisible(true);
@@ -150,7 +173,10 @@ public class GraphRed extends javax.swing.JFrame{
                         }
                     }
                 });
-        
+        this.add(s);
+    }
+    
+    public void initPNGSaveButton(){
         JButton sv = new JButton("PNG");
         sv.setBounds(1240, 30, 90, 25);
         sv.setVisible(true);
@@ -166,101 +192,26 @@ public class GraphRed extends javax.swing.JFrame{
                         }
                     }
                 });
-        
-        
-        
-//        JButton b = new JButton("ok");
-//        b.setBounds(1147, 45, 50, 30);
-//        b.setVisible(true);
-//        b.addActionListener(
-//                new ActionListener(){
-//                    @Override
-//                    public void actionPerformed(ActionEvent e){
-//                        int r,g,b;
-//                        r = Integer.parseInt(R.getText());
-//                        g = Integer.parseInt(G.getText());
-//                        b = Integer.parseInt(B.getText());
-//                        Color c = new Color(r,g,b);
-//                        p.setBackground(c);
-//                        q.getLastShape().setColor(c);
-//                        q.setCvetColor(c);
-//                    }
-//                }
-//        );
-        
-        JButton kvad = new RectangleButton();
-        kvad.setBounds(430,30,200,20);
-        kvad.setVisible(true);
-        kvad.addActionListener(
-                new ActionListener(){
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        if (kvad instanceof RectangleButton)q.addShape(((RectangleButton)kvad).getShape());
-                        
-                    }
-                }
-            
-        );
-        
-        JButton cir = new CircleButton();
-        cir.setBounds(630,30,200,20);
-        cir.setVisible(true);
-        cir.addActionListener(
-                new ActionListener(){
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        if(cir instanceof CircleButton)q.addShape(((CircleButton)cir).getShape());
-                    }
-                }
-            
-        );
-        
-        JButton pol = new PolygonButton();
-        pol.setBounds(830,30,200,20);
-        pol.setVisible(true);
-        pol.addActionListener(
-                new ActionListener(){
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        if(pol instanceof PolygonButton)q.addShape(((PolygonButton)pol).getShape());
-                        
-                    }
-                }
-            
-        );
-        
-        
-        
-        
-        JButton jb = new LineButton();
-        jb.setVisible(true);
-        jb.setBounds(230, 30,200,20);
-        jb.addActionListener ( 
-        new ActionListener()
-        {
-             @Override
-             public void actionPerformed(ActionEvent e){
-                 if (jb instanceof LineButton) q.addShape(((LineButton)jb).getShape());
-//                 jl.setText("new Line"+q.getSize()+"generated");
-                 fr.repaint();
-             }
-        });
-        
-        this.add(ld);
-        this.add(s);
         this.add(sv);
-//        this.add(b);
-        this.add(p);
-        this.add(pol);
-        this.add(cir);
-        this.add(kvad);
-        this.add(jp);
-        this.add(jb);
-        this.add(jp);
-        
-        this.repaint();
-        
     }
+    
+    public void initialize(){
+        initMyCanvas();
+        initColorSelector(10,5);
+        initInstruments();
+        initLoadButton();
+        initSaveButton();
+        initPNGSaveButton();
+    }
+    
+    public void initMyCanvas(){
+        this.jp = new MyCanvas(1450,700,q);
+        this.jp.setVisible(true);
+        this.jp.setBounds(30,90,1450,700);
+        this.add(this.jp);
+    }
+    
+    
     @Override
     public void paint(Graphics g)
     {

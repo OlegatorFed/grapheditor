@@ -91,6 +91,11 @@ public class PolygonShape extends BaseShape{
 			addFirstCoordinates(points.get(i));
 		}	
     }
+
+    @Override
+    public BaseShape cloneShape() {
+        return new PolygonShape();
+    }
    
   
 }

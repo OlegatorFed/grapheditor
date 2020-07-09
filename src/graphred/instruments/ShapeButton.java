@@ -12,10 +12,14 @@ import save.BaseShape;
  *
  * @author DNS
  */
-public abstract class ShapeButton extends JButton{
-    ShapeButton(String name) {
-        super(name);
-        
+public class ShapeButton extends JButton{
+    BaseShape bs;
+    
+    public ShapeButton(BaseShape bs) {
+        super(bs.getType());
+        this.bs = bs;
     }
-    public abstract BaseShape getShape();
+    public BaseShape getShape(){
+        return bs.cloneShape();
+    }
 }

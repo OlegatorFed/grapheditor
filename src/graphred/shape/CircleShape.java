@@ -136,4 +136,9 @@ public class CircleShape extends BaseShape {
         addFirstCoordinates(points.get(0));
         addSecondCoordinates(points.get(1));
     }
+
+    @Override
+    public BaseShape cloneShape() {
+        return new CircleShape();
+    }
 }

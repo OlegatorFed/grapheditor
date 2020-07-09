@@ -97,5 +97,10 @@ public class PolyLineShape extends BaseShape {
         addFirstCoordinates(points.get(0));
         addCurrCoordinates(points.get(1));
     }
+
+    @Override
+    public BaseShape cloneShape() {
+        return new PolyLineShape();
+    }
     
 }
